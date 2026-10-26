@@ -1,13 +1,13 @@
 /**
- * Mod `profile`: ganti persona agent Command Code via `/profile <name>`.
- * Dioptimalkan untuk orkestrasi multi-agent Herdr dan adaptasi arsitektur Addy Osmani agent-skills.
+ * Mod `profile`: switch Command Code agent persona via `/profile <name>`.
+ * Optimized for Herdr multi-agent workspace orchestration and Addy Osmani agent-skills architecture.
  *
- * Profil dibaca dari:
- *   1. ~/.commandcode/profiles/*.md         (global user)
- *   2. <project>/profiles/*.md             (repo level)
+ * Profiles are discovered and loaded from:
+ *   1. ~/.commandcode/profiles/*.md         (global user directory)
+ *   2. <project>/profiles/*.md             (repository level)
  *   3. <project>/.commandcode/profiles/*.md (project overrides)
  *
- * Format file mendukung YAML frontmatter (Addy Osmani style) & legacy header:
+ * Profile files support YAML frontmatter (Addy Osmani specification) and legacy headers:
  *   ---
  *   name: code-reviewer
  *   description: 5-axis review
@@ -51,7 +51,7 @@ export function parseProfileFile(filePath: string, fallbackName: string): Profil
   let herdrTab = fallbackName;
   let body = raw.trim();
 
-  // Parse YAML Frontmatter jika ada
+  // Parse YAML Frontmatter if present
   const frontmatterMatch = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/.exec(raw);
   if (frontmatterMatch) {
     const fmLines = frontmatterMatch[1].split(/\r?\n/);
@@ -72,7 +72,7 @@ export function parseProfileFile(filePath: string, fallbackName: string): Profil
     label = role || name;
   }
 
-  // Fallback parsing (bila tanpa frontmatter lengkap)
+  // Fallback parsing (when frontmatter is missing)
   const lines = raw.split(/\r?\n/);
   if (!label || label === fallbackName) {
     for (const line of lines) {
@@ -152,7 +152,7 @@ export default function (cmd: ModApi): void {
   cmd.addFlag('default', {
     type: 'string',
     default: '',
-    description: 'Nama profil yang otomatis aktif saat sesi Command Code dibuka.',
+    description: 'Name of the profile automatically activated upon session startup.',
   });
 
   const setStatus = (text: string | null): void => {
@@ -184,7 +184,7 @@ export default function (cmd: ModApi): void {
 
   cmd.addCommand({
     name: 'profile',
-    description: 'Kelola persona agent Command Code (Herdr multi-agent team)',
+    description: 'Manage Command Code agent personas (Herdr multi-agent team)',
     argumentHint: '[name|pick|list|off]',
     handler: async ({args}) => {
       const arg = args.trim().toLowerCase();
@@ -194,26 +194,26 @@ export default function (cmd: ModApi): void {
       if (!arg || arg === 'pick') {
         const sorted = [...profiles.values()].sort((a, b) => a.name.localeCompare(b.name));
         const picked = await cmd.ui.select({
-          title: 'Pilih Profile Persona Herdr',
+          title: 'Select Herdr Persona Profile',
           options: sorted.map((p) => ({
             label: p.name,
             description:
-              (p.name === activeProfile ? '[AKTIF] ' : '') +
+              (p.name === activeProfile ? '[ACTIVE] ' : '') +
               `[${p.mode}] ${p.role}: ${p.desc || p.label}`,
           })),
         });
 
         if (!picked) {
           return {
-            message: 'Tidak ada profil yang dipilih. Gunakan `/profile list` untuk melihat opsi.',
+            message: 'No profile selected. Use `/profile list` to view available options.',
           };
         }
 
         const profile = activate(picked);
         return {
           message: profile
-            ? `Profil aktif: ${profile.label} [${profile.mode}] (Herdr tab: ${profile.herdrTab})`
-            : `Profil "${picked}" tidak ditemukan.`,
+            ? `Active profile: ${profile.label} [${profile.mode}] (Herdr tab: ${profile.herdrTab})`
+            : `Profile "${picked}" not found.`,
         };
       }
 
@@ -221,7 +221,7 @@ export default function (cmd: ModApi): void {
       if (arg === 'list') {
         if (profiles.size === 0) {
           return {
-            message: 'Belum ada profil tersedia. Simpan file persona di ./profiles/*.md atau ~/.commandcode/profiles/*.md',
+            message: 'No profiles available. Place persona markdown files in ./profiles/*.md or ~/.commandcode/profiles/*.md',
           };
         }
 
@@ -235,10 +235,10 @@ export default function (cmd: ModApi): void {
 
         return {
           message: [
-            'Daftar Profile Persona (Herdr Team):',
+            'Available Persona Profiles (Herdr Team):',
             ...rows,
             '',
-            'Perintah: /profile <name>  |  /profile off  |  /profile pick  |  /profile list',
+            'Commands: /profile <name>  |  /profile off  |  /profile pick  |  /profile list',
           ].join('\n'),
         };
       }
@@ -247,22 +247,22 @@ export default function (cmd: ModApi): void {
       if (arg === 'off' || arg === 'default') {
         activeProfile = null;
         setStatus(null);
-        return {message: 'Profil dinonaktifkan — kembali ke persona default Command Code.'};
+        return {message: 'Profile deactivated — restored default Command Code persona.'};
       }
 
       // Activate specific profile
       const profile = activate(arg);
       if (profile) {
         return {
-          message: `Profil aktif: ${profile.label} [${profile.mode}] (Herdr tab: ${profile.herdrTab})`,
+          message: `Active profile: ${profile.label} [${profile.mode}] (Herdr tab: ${profile.herdrTab})`,
         };
       }
 
       const available = [...profiles.keys()].sort().join(', ');
       return {
         message: available
-          ? `Profil "${arg}" tidak ditemukan. Pilihan tersedia: ${available}`
-          : 'Belum ada profil tersedia.',
+          ? `Profile "${arg}" not found. Available options: ${available}`
+          : 'No profiles available.',
       };
     },
   });
@@ -272,7 +272,7 @@ export default function (cmd: ModApi): void {
     if (typeof def === 'string' && def.trim()) {
       const profile = activate(def.trim().toLowerCase());
       if (!profile) {
-        cmd.ui.notify(`Profil default "${def}" tidak ditemukan di folder profiles.`, 'warning');
+        cmd.ui.notify(`Default profile "${def}" not found in profiles folder.`, 'warning');
       }
       return;
     }
