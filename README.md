@@ -6,7 +6,7 @@
 *Adapted from Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills) architectural patterns.*
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-blue.svg)](https://www.typescriptlang.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![npm](https://img.shields.io/npm/v/commandcode-herdr-profile.svg)](https://www.npmjs.com/package/commandcode-herdr-profile)
 [![Command Code](https://img.shields.io/badge/Command%20Code-Mod-purple.svg)](https://commandcode.ai/)
 [![Herdr](https://img.shields.io/badge/Orchestration-Herdr-orange.svg)](https://github.com/)
 
@@ -57,9 +57,21 @@ The catalog combines developer team roles with Addy Osmani's specialized audit p
 
 ## Installation
 
-### Global Installation (User Level)
+### 1. Via Command Code CLI (Recommended)
 
-Install the mod and profiles into your user-level Command Code configuration (`~/.commandcode/`) to make them available across all repositories.
+Install directly from npm across your environment:
+
+```bash
+# Install globally for all projects (user scope)
+cmdc mods add -g commandcode-herdr-profile
+
+# Or install for the current project only
+cmdc mods add commandcode-herdr-profile
+```
+
+### 2. Manual Global Installation (User Level)
+
+Alternatively, copy the files manually into your user configuration (`~/.commandcode/`):
 
 #### Windows (PowerShell)
 
