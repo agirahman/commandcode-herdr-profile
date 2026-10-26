@@ -4,12 +4,24 @@
   "description": "Command Code Profile Mod and Personas for Herdr multi-agent orchestration, adapted from Addy Osmani agent-skills",
   "main": "dist/mods/profile.js",
   "types": "dist/mods/profile.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/agirahman/commandcode-herdr-profile.git"
+  },
+  "commandcode": {
+    "mods": [
+      "./mods/profile.ts"
+    ]
+  },
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "test": "node test/validate-profiles.cjs"
   },
   "keywords": [
+    "cmd-mod",
+    "cmd-mod-command",
+    "cmd-mod-hook",
     "commandcode",
     "herdr",
     "agents",
@@ -18,7 +30,10 @@
     "orchestration",
     "worktrees"
   ],
-  "author": "Agira Rahman",
+  "author": {
+    "name": "Agira Rahman",
+    "url": "https://github.com/agirahman"
+  },
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.11.0",
