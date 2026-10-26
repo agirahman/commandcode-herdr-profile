@@ -6,7 +6,7 @@
 *Adapted from Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills) architectural patterns.*
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-blue.svg)](https://www.typescriptlang.org/)
-[![npm](https://img.shields.io/npm/v/righthand.svg)](https://www.npmjs.com/package/righthand)
+[![npm](https://img.shields.io/npm/v/@agirahman/righthand.svg)](https://www.npmjs.com/package/@agirahman/righthand)
 [![Command Code](https://img.shields.io/badge/Command%20Code-Mod-purple.svg)](https://commandcode.ai/)
 [![Herdr](https://img.shields.io/badge/Orchestration-Herdr-orange.svg)](https://herdr.dev/)
 
@@ -61,10 +61,10 @@ Install directly from npm across your environment:
 
 ```bash
 # Install globally for all projects (user scope)
-cmdc mods add -g righthand
+cmdc mods add -g @agirahman/righthand
 
 # Or install for the current project only
-cmdc mods add righthand
+cmdc mods add @agirahman/righthand
 ```
 
 ### 2. Manual Global Installation (User Level)

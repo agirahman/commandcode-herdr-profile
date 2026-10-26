@@ -1,5 +1,5 @@
 {
-  "name": "righthand",
+  "name": "@agirahman/righthand",
   "version": "1.0.0",
   "description": "RightHand: specialist agent personas and multi-agent orchestration for Herdr workspaces across coding harnesses",
   "main": "dist/mods/righthand.js",
