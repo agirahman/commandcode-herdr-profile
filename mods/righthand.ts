@@ -178,7 +178,7 @@ export default function (cmd: ModApi): void {
     const target = profiles.get(name.toLowerCase());
     if (!target) return undefined;
     activeProfile = target.name;
-    setStatus(`profile: ${target.label} [${target.mode}]`);
+    setStatus(`righthand: ${target.label} [${target.mode}]`);
     return target;
   };
 
@@ -188,7 +188,7 @@ export default function (cmd: ModApi): void {
       const profiles = loadAllProfiles(cmd.cwd);
       const current = profiles.get(activeProfile);
       if (!current) return undefined;
-      return `## Active profile: ${current.label} (${current.mode})\nHerdr Tab: ${current.herdrTab || current.name}\n\n${current.body}`;
+      return `## Active RightHand persona: ${current.label} (${current.mode})\nHerdr Tab: ${current.herdrTab || current.name}\n\n${current.body}`;
     },
   });
 
@@ -307,6 +307,6 @@ export default function (cmd: ModApi): void {
       return;
     }
     const current = activeProfile ? loadAllProfiles(cmd.cwd).get(activeProfile) : undefined;
-    setStatus(current ? `profile: ${current.label} [${current.mode}]` : null);
+    setStatus(current ? `righthand: ${current.label} [${current.mode}]` : null);
   });
 }
