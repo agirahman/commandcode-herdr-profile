@@ -1,0 +1,27 @@
+{
+  "name": "commandcode-herdr-profile",
+  "version": "1.0.0",
+  "description": "Command Code Profile Mod and Personas for Herdr multi-agent orchestration, adapted from Addy Osmani agent-skills",
+  "main": "dist/mods/profile.js",
+  "types": "dist/mods/profile.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "node test/validate-profiles.cjs"
+  },
+  "keywords": [
+    "commandcode",
+    "herdr",
+    "agents",
+    "personas",
+    "addyosmani",
+    "orchestration",
+    "worktrees"
+  ],
+  "author": "Agira Rahman",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3"
+  }
+}
