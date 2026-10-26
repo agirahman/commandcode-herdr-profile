@@ -22,13 +22,11 @@ Instead of treating an AI agent as a generic monolith, this mod injects targeted
 
 ### Architectural Principles
 
-This project adheres to the three-tier composition model established by Addy Osmani's agent specification:
+This mod focuses on targeted persona injection and workspace isolation:
 
-| Layer | Definition | Example | Responsibility |
-|---|---|---|---|
-| **Persona** | A specialized role with a distinct perspective and rigid output format. | `code-reviewer`, `security-auditor` | The *Who* — adopts an evaluation lens and delivers a structured report. |
-| **Skill** | An executable workflow with discrete steps and exit criteria. | `test-driven-development`, `systematic-debugging` | The *How* — invoked within a persona or directly by the session. |
-| **Command** | An entry point composing personas and skills across workspaces. | `/profile`, `/ship`, Herdr orchestrator | The *When* — coordinates execution and merges findings. |
+- **Single-Perspective Personas**: Each persona embodies a specialized engineering role with a clear evaluation lens, rigid output format, and strict execution boundaries.
+- **No Recursive Persona Invocations**: Personas do not invoke other personas at runtime. Multi-agent coordination occurs at the user or orchestrator level across Herdr tabs.
+- **Ticket & Worktree Isolation**: Sub-agents communicate through explicit tickets, structured reports, and isolated git worktrees rather than unstructured shared state.
 
 > [!IMPORTANT]
 > **Personas do not invoke other personas.** Orchestration occurs at the user or orchestrator level via Herdr tabs. Sub-agents communicate through tickets, reports, and isolated git worktrees rather than recursive runtime calls.
@@ -191,3 +189,12 @@ npm test
 # Verify TypeScript compilation of the mod engine
 npm run typecheck
 ```
+
+---
+
+## Roadmap
+
+Planned enhancements for future updates:
+- **Bundled Skills Layer**: Ship dedicated workflow skills (such as test-driven development and systematic debugging) directly inside the package.
+- **Orchestrator Skill Delegation**: Enable the lead orchestrator to attach specialized workflow skills dynamically when dispatching tickets to worker personas.
+- **Automated Worktree Lifecycle Management**: Automated cleanup, status verification, and merge tooling for completed ticket worktree branches.
