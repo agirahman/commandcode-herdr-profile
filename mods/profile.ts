@@ -204,25 +204,27 @@ export default function (cmd: ModApi): void {
       if (!arg || arg === 'pick') {
         const sorted = [...profiles.values()].sort((a, b) => a.name.localeCompare(b.name));
         const picked = await cmd.ui.select({
-          title: 'Select Herdr Persona Profile',
-          options: sorted.map((p) => ({
-            label: p.name,
-            description:
-              (p.name === activeProfile ? '[ACTIVE] ' : '') +
-              `[${p.mode}] ${p.role}: ${p.desc || p.label}`,
-          })),
+          title: 'Select Agent Persona Profile',
+          options: sorted.map((p) => {
+            const activePrefix = p.name === activeProfile ? '[ACTIVE] ' : '';
+            const modeBadge = `[${p.mode.toUpperCase()}]`;
+            return {
+              label: p.name,
+              description: `${activePrefix}${modeBadge} ${p.role}: ${p.desc || p.label}`,
+            };
+          }),
         });
 
         if (!picked) {
           return {
-            message: 'No profile selected. Use `/profile list` to view available options.',
+            message: 'No profile selected. Run `/profile list` to view all personas with full descriptions.',
           };
         }
 
         const profile = activate(picked);
         return {
           message: profile
-            ? `Active profile: ${profile.label} [${profile.mode}] (Herdr tab: ${profile.herdrTab})`
+            ? `Active persona: ${profile.label} [${profile.mode}] (Herdr tab: ${profile.herdrTab})`
             : `Profile "${picked}" not found.`,
         };
       }
@@ -231,24 +233,32 @@ export default function (cmd: ModApi): void {
       if (arg === 'list') {
         if (profiles.size === 0) {
           return {
-            message: 'No profiles available. Place persona markdown files in ./profiles/*.md or ~/.commandcode/profiles/*.md',
+            message: 'No profiles found. Place persona markdown files in ./profiles/*.md or ~/.commandcode/profiles/*.md',
           };
         }
 
-        const rows = [...profiles.values()]
+        const cards = [...profiles.values()]
           .sort((a, b) => a.name.localeCompare(b.name))
           .map((p) => {
-            const prefix = p.name === activeProfile ? '=>' : '  ';
-            const badge = `[${p.mode}]`;
-            return `${prefix} ${p.name.padEnd(24)} ${badge.padEnd(10)} ${p.role} — ${p.desc || p.label}`;
+            const isCurrent = p.name === activeProfile;
+            const marker = isCurrent ? '▶ ' : '• ';
+            const status = isCurrent ? ' [ACTIVE]' : '';
+            const mode = `[${p.mode.toUpperCase()}]`;
+            const header = `${marker}${p.name} ${mode} — ${p.role}${status}`;
+            const desc = `    Role & Purpose: ${p.desc || p.label}`;
+            const tab = `    Herdr Tab: ${p.herdrTab || p.name}`;
+            return `${header}\n${desc}\n${tab}`;
           });
 
         return {
           message: [
-            'Available Persona Profiles (Herdr Team):',
-            ...rows,
+            'Available Agent Personas (Herdr Multi-Agent Team):',
+            '==================================================',
             '',
-            'Commands: /profile <name>  |  /profile off  |  /profile pick  |  /profile list',
+            cards.join('\n\n'),
+            '',
+            '--------------------------------------------------',
+            'Usage: /profile <name>  |  /profile off  |  /profile pick  |  /profile list',
           ].join('\n'),
         };
       }
