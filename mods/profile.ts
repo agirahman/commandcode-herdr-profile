@@ -119,7 +119,17 @@ export function parseProfileFile(filePath: string, fallbackName: string): Profil
 
 export function loadAllProfiles(cwd: string): Map<string, ProfileMetadata> {
   const map = new Map<string, ProfileMetadata>();
+  let packageProfilesDir: string | undefined;
+  try {
+    if (typeof __dirname !== 'undefined') {
+      packageProfilesDir = join(__dirname, '..', 'profiles');
+    }
+  } catch {
+    // fallback if __dirname is unavailable
+  }
+
   const searchDirs = [
+    ...(packageProfilesDir ? [packageProfilesDir] : []),
     join(homedir(), '.commandcode', 'profiles'),
     join(cwd, 'profiles'),
     join(cwd, '.commandcode', 'profiles'),

@@ -1,6 +1,6 @@
 {
   "name": "commandcode-herdr-profile",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Command Code Profile Mod and Personas for Herdr multi-agent orchestration, adapted from Addy Osmani agent-skills",
   "main": "dist/mods/profile.js",
   "types": "dist/mods/profile.d.ts",
