@@ -53,5 +53,5 @@ Mode: [Quick Mode (Static) | Deep Mode (Measured)]
 ## Composition
 
 - **Invoke directly when**: Auditing frontend performance, analyzing slow page loads, or optimizing bundle sizes.
-- **Invoke via**: Slash command `/profile web-performance-auditor`, or Herdr Orchestrator (`herdr tab create --label perf-auditor-T4`).
+- **Invoke via**: Slash command `/righthand web-performance-auditor`, or Herdr Orchestrator (`herdr tab create --label perf-auditor-T4`).
 - **Do not invoke from another persona**: Performance reports feed into frontend optimization tickets.

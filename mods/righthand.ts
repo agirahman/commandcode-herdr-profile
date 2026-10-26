@@ -1,6 +1,6 @@
 /**
- * Mod `profile`: switch Command Code agent persona via `/profile <name>`.
- * Optimized for Herdr multi-agent workspace orchestration and Addy Osmani agent-skills architecture.
+ * Mod `righthand`: switch agent persona via `/righthand <name>` (or `/profile <name>`).
+ * Multi-agent orchestration engine for Herdr workspaces, adapted from Addy Osmani agent-skills architecture.
  *
  * Profiles are discovered and loaded from:
  *   1. ~/.commandcode/profiles/*.md         (global user directory)
@@ -192,99 +192,109 @@ export default function (cmd: ModApi): void {
     },
   });
 
-  cmd.addCommand({
-    name: 'profile',
-    description: 'Manage Command Code agent personas (Herdr multi-agent team)',
-    argumentHint: '[name|pick|list|off]',
-    handler: async ({args}) => {
-      const arg = args.trim().toLowerCase();
-      const profiles = loadAllProfiles(cmd.cwd);
+  const commandHandler = async ({args}: {args: string}) => {
+    const arg = args.trim().toLowerCase();
+    const profiles = loadAllProfiles(cmd.cwd);
 
-      // Interactive pick
-      if (!arg || arg === 'pick') {
-        const sorted = [...profiles.values()].sort((a, b) => a.name.localeCompare(b.name));
-        const picked = await cmd.ui.select({
-          title: 'Select Agent Persona Profile',
-          options: sorted.map((p) => {
-            const activePrefix = p.name === activeProfile ? '[ACTIVE] ' : '';
-            const modeBadge = `[${p.mode.toUpperCase()}]`;
-            return {
-              label: p.name,
-              description: `${activePrefix}${modeBadge} ${p.role}: ${p.desc || p.label}`,
-            };
-          }),
+    // Interactive pick
+    if (!arg || arg === 'pick') {
+      const sorted = [...profiles.values()].sort((a, b) => a.name.localeCompare(b.name));
+      const picked = await cmd.ui.select({
+        title: 'Select RightHand Agent Persona',
+        options: sorted.map((p) => {
+          const activePrefix = p.name === activeProfile ? '[ACTIVE] ' : '';
+          const modeBadge = `[${p.mode.toUpperCase()}]`;
+          return {
+            label: p.name,
+            description: `${activePrefix}${modeBadge} ${p.role}: ${p.desc || p.label}`,
+          };
+        }),
+      });
+
+      if (!picked) {
+        return {
+          message: 'No persona selected. Run `/righthand list` to view all personas with full descriptions.',
+        };
+      }
+
+      const profile = activate(picked);
+      return {
+        message: profile
+          ? `Active persona: ${profile.label} [${profile.mode}] (Herdr tab: ${profile.herdrTab})`
+          : `Persona "${picked}" not found.`,
+      };
+    }
+
+    // List profiles
+    if (arg === 'list') {
+      if (profiles.size === 0) {
+        return {
+          message: 'No personas found. Place persona markdown files in ./profiles/*.md or ~/.commandcode/profiles/*.md',
+        };
+      }
+
+      const cards = [...profiles.values()]
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((p) => {
+          const isCurrent = p.name === activeProfile;
+          const marker = isCurrent ? '▶ ' : '• ';
+          const status = isCurrent ? ' [ACTIVE]' : '';
+          const mode = `[${p.mode.toUpperCase()}]`;
+          const header = `${marker}${p.name} ${mode} — ${p.role}${status}`;
+          const desc = `    Role & Purpose: ${p.desc || p.label}`;
+          const tab = `    Herdr Tab: ${p.herdrTab || p.name}`;
+          return `${header}\n${desc}\n${tab}`;
         });
 
-        if (!picked) {
-          return {
-            message: 'No profile selected. Run `/profile list` to view all personas with full descriptions.',
-          };
-        }
-
-        const profile = activate(picked);
-        return {
-          message: profile
-            ? `Active persona: ${profile.label} [${profile.mode}] (Herdr tab: ${profile.herdrTab})`
-            : `Profile "${picked}" not found.`,
-        };
-      }
-
-      // List profiles
-      if (arg === 'list') {
-        if (profiles.size === 0) {
-          return {
-            message: 'No profiles found. Place persona markdown files in ./profiles/*.md or ~/.commandcode/profiles/*.md',
-          };
-        }
-
-        const cards = [...profiles.values()]
-          .sort((a, b) => a.name.localeCompare(b.name))
-          .map((p) => {
-            const isCurrent = p.name === activeProfile;
-            const marker = isCurrent ? '▶ ' : '• ';
-            const status = isCurrent ? ' [ACTIVE]' : '';
-            const mode = `[${p.mode.toUpperCase()}]`;
-            const header = `${marker}${p.name} ${mode} — ${p.role}${status}`;
-            const desc = `    Role & Purpose: ${p.desc || p.label}`;
-            const tab = `    Herdr Tab: ${p.herdrTab || p.name}`;
-            return `${header}\n${desc}\n${tab}`;
-          });
-
-        return {
-          message: [
-            'Available Agent Personas (Herdr Multi-Agent Team):',
-            '==================================================',
-            '',
-            cards.join('\n\n'),
-            '',
-            '--------------------------------------------------',
-            'Usage: /profile <name>  |  /profile off  |  /profile pick  |  /profile list',
-          ].join('\n'),
-        };
-      }
-
-      // Turn off profile
-      if (arg === 'off' || arg === 'default') {
-        activeProfile = null;
-        setStatus(null);
-        return {message: 'Profile deactivated — restored default Command Code persona.'};
-      }
-
-      // Activate specific profile
-      const profile = activate(arg);
-      if (profile) {
-        return {
-          message: `Active profile: ${profile.label} [${profile.mode}] (Herdr tab: ${profile.herdrTab})`,
-        };
-      }
-
-      const available = [...profiles.keys()].sort().join(', ');
       return {
-        message: available
-          ? `Profile "${arg}" not found. Available options: ${available}`
-          : 'No profiles available.',
+        message: [
+          'RightHand Specialist Personas (Herdr Multi-Agent Team):',
+          '========================================================',
+          '',
+          cards.join('\n\n'),
+          '',
+          '--------------------------------------------------------',
+          'Usage: /righthand <name>  |  /righthand off  |  /righthand pick  |  /righthand list',
+          '(Note: /profile is supported as an alias)',
+        ].join('\n'),
       };
-    },
+    }
+
+    // Turn off profile
+    if (arg === 'off' || arg === 'default') {
+      activeProfile = null;
+      setStatus(null);
+      return {message: 'Persona deactivated — restored default agent behavior.'};
+    }
+
+    // Activate specific profile
+    const profile = activate(arg);
+    if (profile) {
+      return {
+        message: `Active persona: ${profile.label} [${profile.mode}] (Herdr tab: ${profile.herdrTab})`,
+      };
+    }
+
+    const available = [...profiles.keys()].sort().join(', ');
+    return {
+      message: available
+        ? `Persona "${arg}" not found. Available options: ${available}`
+        : 'No personas available.',
+    };
+  };
+
+  cmd.addCommand({
+    name: 'righthand',
+    description: 'Switch specialist agent persona in Herdr multi-agent team',
+    argumentHint: '[name|pick|list|off]',
+    handler: commandHandler,
+  });
+
+  cmd.addCommand({
+    name: 'profile',
+    description: 'Alias for /righthand',
+    argumentHint: '[name|pick|list|off]',
+    handler: commandHandler,
   });
 
   cmd.on('session_start', () => {

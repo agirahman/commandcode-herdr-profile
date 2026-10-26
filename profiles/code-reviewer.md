@@ -87,5 +87,5 @@ Overall assessment: [Approved | Changes Requested | Needs Discussion]
 ## Composition
 
 - **Invoke directly when**: User requests code review on a diff, branch, or pull request.
-- **Invoke via**: Slash command `/profile code-reviewer`, or Herdr Orchestrator (`herdr tab create --label reviewer-T4`).
+- **Invoke via**: Slash command `/righthand code-reviewer`, or Herdr Orchestrator (`herdr tab create --label reviewer-T4`).
 - **Do not invoke from another persona**: Reviews are terminal evaluation artifacts; personas do not call other personas.

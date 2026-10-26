@@ -66,5 +66,5 @@ Always generate and output a ticket contract table prior to delegation:
 ## Composition
 
 - **Invoke directly when**: The user presents a complex initiative, multi-step task, or requests multi-agent coordination in Herdr.
-- **Invoke via**: Slash command `/profile orchestrator` or as the workspace default starter profile.
+- **Invoke via**: Slash command `/righthand orchestrator` or as the workspace default starter profile.
 - **Rule**: Personas do not call personas directly. The orchestrator delegates across Herdr tabs; never perform nested runtime agent calls.

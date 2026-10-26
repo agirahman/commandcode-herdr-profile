@@ -63,5 +63,5 @@ completed | partial | blocked
 ## Composition
 
 - **Invoke directly when**: Configuring CI/CD pipelines, Docker containers, deployment automation, or environment configurations.
-- **Invoke via**: Herdr Orchestrator (`herdr tab create --label devops-T3`) or slash command `/profile devops`.
+- **Invoke via**: Herdr Orchestrator (`herdr tab create --label devops-T3`) or slash command `/righthand devops`.
 - **Rule**: Do not delegate directly to other personas. Document application dependencies in the status report.

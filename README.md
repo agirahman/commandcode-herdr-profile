@@ -1,12 +1,12 @@
 <div align="center">
 
-# Command Code Profile Mod for Herdr
+# RightHand
 
-**Specialist agent personas and orchestration mod for Command Code within multi-agent Herdr workspaces.**  
+**Specialist agent personas and multi-agent orchestration engine for Herdr workspaces across coding harnesses.**  
 *Adapted from Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills) architectural patterns.*
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-blue.svg)](https://www.typescriptlang.org/)
-[![npm](https://img.shields.io/npm/v/commandcode-herdr-profile.svg)](https://www.npmjs.com/package/commandcode-herdr-profile)
+[![npm](https://img.shields.io/npm/v/righthand.svg)](https://www.npmjs.com/package/righthand)
 [![Command Code](https://img.shields.io/badge/Command%20Code-Mod-purple.svg)](https://commandcode.ai/)
 [![Herdr](https://img.shields.io/badge/Orchestration-Herdr-orange.svg)](https://herdr.dev/)
 
@@ -16,9 +16,9 @@
 
 ## Overview
 
-`commandcode-herdr-profile` provides a modular persona engine and a curated catalog of engineering personas designed for autonomous pair-programming and multi-agent coordination in [Herdr](https://herdr.dev/).
+`righthand` acts as your executive second-in-command for multi-agent workflows in [Herdr](https://herdr.dev/). It provides a modular persona engine and curated specialist roles designed for autonomous pair-programming, ticket-driven delegation, and workspace isolation across coding harnesses.
 
-Instead of treating an AI agent as a generic monolith, this mod injects targeted personas via Command Code's `appendSystemPrompt` hook. Each persona maintains a single perspective, follows rigid output standards, and operates with clear execution boundaries.
+Instead of treating an AI agent as a generic monolith, RightHand injects targeted personas via Command Code's `appendSystemPrompt` hook. Each persona maintains a single perspective, follows rigid output standards, and operates with clear execution boundaries.
 
 ### Architectural Principles
 
@@ -61,10 +61,10 @@ Install directly from npm across your environment:
 
 ```bash
 # Install globally for all projects (user scope)
-cmdc mods add -g commandcode-herdr-profile
+cmdc mods add -g righthand
 
 # Or install for the current project only
-cmdc mods add commandcode-herdr-profile
+cmdc mods add righthand
 ```
 
 ### 2. Manual Global Installation (User Level)
@@ -79,7 +79,7 @@ New-Item -ItemType Directory -Force "$HOME\.commandcode\mods"
 New-Item -ItemType Directory -Force "$HOME\.commandcode\profiles"
 
 # Copy mod engine and profile files
-Copy-Item ".\mods\profile.ts" "$HOME\.commandcode\mods\profile.ts" -Force
+Copy-Item ".\mods\righthand.ts" "$HOME\.commandcode\mods\righthand.ts" -Force
 Copy-Item ".\profiles\*.md" "$HOME\.commandcode\profiles\" -Force
 ```
 
@@ -90,7 +90,7 @@ Copy-Item ".\profiles\*.md" "$HOME\.commandcode\profiles\" -Force
 mkdir -p ~/.commandcode/mods ~/.commandcode/profiles
 
 # Copy mod engine and profile files
-cp ./mods/profile.ts ~/.commandcode/mods/profile.ts
+cp ./mods/righthand.ts ~/.commandcode/mods/righthand.ts
 cp ./profiles/*.md ~/.commandcode/profiles/
 ```
 
@@ -106,24 +106,25 @@ The mod loads project-level profiles with precedence over global user-level prof
 
 ## Usage in Command Code
 
-### Interactive Slash Commands
+### Slash Commands
 
-Once installed, use the `/profile` command within any Command Code session:
+Once installed, use `/righthand` (or its alias `/profile`) within any Command Code session:
 
 ```bash
 # Launch interactive fuzzy picker
-/profile
+/righthand
+# (or /profile)
 
 # Switch directly to a persona
-/profile backend
-/profile code-reviewer
-/profile orchestrator
+/righthand backend
+/righthand code-reviewer
+/righthand orchestrator
 
-# Display all available profiles and their current active state
-/profile list
+# Display all available personas with detailed roles and Herdr tabs
+/righthand list
 
-# Deactivate the current profile and restore the base persona
-/profile off
+# Deactivate the current persona and restore default behavior
+/righthand off
 ```
 
 ### Session Startup Flag

@@ -68,5 +68,5 @@ Brief summary of critical risk factors.
 ## Composition
 
 - **Invoke directly when**: Auditing authentication, authorization, payment flows, API endpoints, or third-party integrations.
-- **Invoke via**: Slash command `/profile security-auditor`, or Herdr Orchestrator (`herdr tab create --label security-auditor-T4`).
+- **Invoke via**: Slash command `/righthand security-auditor`, or Herdr Orchestrator (`herdr tab create --label security-auditor-T4`).
 - **Do not invoke from another persona**: Report security findings back to user or Orchestrator.

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Helper script to spawn an agent tab in Herdr workspace with Command Code profile.
+# Helper script to spawn an agent tab in Herdr workspace with RightHand persona.
 # Usage: ./scripts/herdr-spawn.sh <workspace> <role> [ticket] [description]
 # Example: ./scripts/herdr-spawn.sh w1 backend T1 auth-api
 

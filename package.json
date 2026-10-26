@@ -1,16 +1,16 @@
 {
-  "name": "commandcode-herdr-profile",
-  "version": "1.0.1",
-  "description": "Command Code Profile Mod and Personas for Herdr multi-agent orchestration, adapted from Addy Osmani agent-skills",
-  "main": "dist/mods/profile.js",
-  "types": "dist/mods/profile.d.ts",
+  "name": "righthand",
+  "version": "1.0.0",
+  "description": "RightHand: specialist agent personas and multi-agent orchestration for Herdr workspaces across coding harnesses",
+  "main": "dist/mods/righthand.js",
+  "types": "dist/mods/righthand.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/agirahman/commandcode-herdr-profile.git"
+    "url": "git+https://github.com/agirahman/righthand.git"
   },
   "commandcode": {
     "mods": [
-      "./mods/profile.ts"
+      "./mods/righthand.ts"
     ]
   },
   "scripts": {
@@ -22,12 +22,13 @@
     "cmd-mod",
     "cmd-mod-command",
     "cmd-mod-hook",
-    "commandcode",
+    "righthand",
     "herdr",
+    "commandcode",
     "agents",
     "personas",
-    "addyosmani",
     "orchestration",
+    "addyosmani",
     "worktrees"
   ],
   "author": {

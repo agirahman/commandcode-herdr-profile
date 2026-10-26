@@ -63,5 +63,5 @@ High-level testing assessment.
 ## Composition
 
 - **Invoke directly when**: Designing test plans, verifying bug fixes, evaluating test coverage, or auditing test suite quality.
-- **Invoke via**: Slash command `/profile test-engineer`, or Herdr Orchestrator (`herdr tab create --label test-engineer-T3`).
+- **Invoke via**: Slash command `/righthand test-engineer`, or Herdr Orchestrator (`herdr tab create --label test-engineer-T3`).
 - **Do not invoke from another persona**: Test plans are provided to the user or Orchestrator.

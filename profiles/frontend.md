@@ -68,5 +68,5 @@ completed | partial | blocked
 ## Composition
 
 - **Invoke directly when**: Building UI components, styling, client state logic, form interactions, or accessibility fixes.
-- **Invoke via**: Herdr Orchestrator (`herdr tab create --label frontend-T2`) or slash command `/profile frontend`.
+- **Invoke via**: Herdr Orchestrator (`herdr tab create --label frontend-T2`) or slash command `/righthand frontend`.
 - **Rule**: Do not delegate directly to other personas. Document API requirements for the `backend` role in the final report.

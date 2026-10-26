@@ -1,11 +1,11 @@
 <#
 .SYNOPSIS
-  Helper script to spawn an agent tab in Herdr workspace with Command Code profile.
+  Helper script to spawn an agent tab in Herdr workspace with RightHand persona.
 
 .DESCRIPTION
   Creates a new Herdr tab in the specified workspace with a standardized label
   '<role>-<ticket>', prepares a ticket-numbered git worktree for writer roles,
-  and starts Command Code with the requested profile.
+  and starts Command Code with the requested persona.
 
 .PARAMETER Workspace
   Herdr workspace ID (e.g. w1, w2)

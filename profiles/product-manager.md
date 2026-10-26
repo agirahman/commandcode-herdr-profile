@@ -61,5 +61,5 @@ Explicit working assumptions made to bridge missing details.
 ## Composition
 
 - **Invoke directly when**: User requirements are vague, an initiative lacks a spec, or acceptance criteria are missing.
-- **Invoke via**: Slash command `/profile product-manager` or via the Herdr Orchestrator.
+- **Invoke via**: Slash command `/righthand product-manager` or via the Herdr Orchestrator.
 - **Rule**: Do not delegate directly to other personas. Deliver completed specifications to the Orchestrator for ticket creation.

@@ -62,5 +62,5 @@ completed | partial | blocked
 ## Composition
 
 - **Invoke directly when**: Working on API endpoints, server controllers, database schemas, or authentication logic.
-- **Invoke via**: Herdr Orchestrator (`herdr tab create --label backend-T1`) or slash command `/profile backend`.
+- **Invoke via**: Herdr Orchestrator (`herdr tab create --label backend-T1`) or slash command `/righthand backend`.
 - **Rule**: Do not delegate directly to other personas. If frontend adjustments are needed, document them as recommendations for the `frontend` role.

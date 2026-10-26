@@ -53,5 +53,5 @@ Component A -> Contract [Interface/Payload] -> Component B
 ## Composition
 
 - **Invoke directly when**: High-impact design decisions, major refactorings, or subsystem boundary definitions are required.
-- **Invoke via**: Slash command `/profile architect` or via the Herdr Orchestrator.
+- **Invoke via**: Slash command `/righthand architect` or via the Herdr Orchestrator.
 - **Rule**: Do not implement code directly. Architecture outputs provide specifications for the Orchestrator and writer personas.

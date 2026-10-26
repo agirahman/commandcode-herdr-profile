@@ -58,5 +58,5 @@ completed | partial | blocked
 ## Composition
 
 - **Invoke directly when**: Implementing general automation, scripts, build tooling, or glue code.
-- **Invoke via**: Herdr Orchestrator (`herdr tab create --label worker-T1`) or slash command `/profile worker`.
+- **Invoke via**: Herdr Orchestrator (`herdr tab create --label worker-T1`) or slash command `/righthand worker`.
 - **Rule**: Do not delegate to other personas. Return status reports to the Orchestrator for integration.
