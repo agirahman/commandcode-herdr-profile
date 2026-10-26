@@ -35,6 +35,16 @@
     "url": "https://github.com/agirahman"
   },
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "mods",
+    "profiles",
+    "scripts",
+    "types",
+    "README.md"
+  ],
   "devDependencies": {
     "@types/node": "^20.11.0",
     "typescript": "^5.3.3"
