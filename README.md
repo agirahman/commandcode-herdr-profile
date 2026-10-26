@@ -8,7 +8,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-blue.svg)](https://www.typescriptlang.org/)
 [![npm](https://img.shields.io/npm/v/commandcode-herdr-profile.svg)](https://www.npmjs.com/package/commandcode-herdr-profile)
 [![Command Code](https://img.shields.io/badge/Command%20Code-Mod-purple.svg)](https://commandcode.ai/)
-[![Herdr](https://img.shields.io/badge/Orchestration-Herdr-orange.svg)](https://github.com/)
+[![Herdr](https://img.shields.io/badge/Orchestration-Herdr-orange.svg)](https://herdr.dev/)
 
 </div>
 
@@ -16,7 +16,7 @@
 
 ## Overview
 
-`commandcode-herdr-profile` provides a modular persona engine and a curated catalog of engineering personas designed for autonomous pair-programming and multi-agent coordination in [Herdr](https://github.com/).
+`commandcode-herdr-profile` provides a modular persona engine and a curated catalog of engineering personas designed for autonomous pair-programming and multi-agent coordination in [Herdr](https://herdr.dev/).
 
 Instead of treating an AI agent as a generic monolith, this mod injects targeted personas via Command Code's `appendSystemPrompt` hook. Each persona maintains a single perspective, follows rigid output standards, and operates with clear execution boundaries.
 
@@ -139,6 +139,8 @@ cmdc --mod-option default=backend
 ---
 
 ## Herdr Multi-Agent Orchestration
+
+[Herdr](https://herdr.dev/) is an orchestration platform and multi-agent workspace manager that allows developers to run, supervise, and coordinate multiple AI coding agents in parallel tabs across dedicated workspaces.
 
 ### Worktree Isolation for Writer Personas
 
