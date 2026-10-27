@@ -156,8 +156,10 @@ export function loadAllProfiles(cwd: string): Map<string, ProfileMetadata> {
   return map;
 }
 
+const SESSION_ENTRY_TYPE = 'righthand/persona';
+
 export default function (cmd: ModApi): void {
-  let activeProfile: string | null = null;
+  let activeProfile: string | null | undefined = undefined;
 
   cmd.addFlag('default', {
     type: 'string',
@@ -173,20 +175,96 @@ export default function (cmd: ModApi): void {
     }
   };
 
+  const resolveActiveProfile = (): string | null => {
+    if (activeProfile !== undefined) {
+      return activeProfile;
+    }
+
+    // 1. Check session custom entries (persisted across session resume)
+    if (cmd.session) {
+      try {
+        const entries = cmd.session.getCustomEntries<{persona?: string | null}>({
+          customType: SESSION_ENTRY_TYPE,
+        });
+        if (entries && entries.length > 0) {
+          const last = entries[entries.length - 1];
+          if (last?.data && 'persona' in last.data) {
+            activeProfile = last.data.persona ?? null;
+            cmd.state?.set('activeProfile', activeProfile);
+            return activeProfile;
+          }
+        }
+      } catch {}
+    }
+
+    // 2. Check mod state in host memory (retained across /reload within same process)
+    const stateVal = cmd.state?.get<string | null>('activeProfile');
+    if (typeof stateVal === 'string' || stateVal === null) {
+      activeProfile = stateVal;
+      return activeProfile;
+    }
+
+    // 3. Fallback to CLI startup flag --mod-option default=<name>
+    const def = cmd.getFlag('default');
+    if (typeof def === 'string' && def.trim()) {
+      const defProfile = def.trim().toLowerCase();
+      activeProfile = defProfile;
+      cmd.state?.set('activeProfile', defProfile);
+      return activeProfile;
+    }
+
+    activeProfile = null;
+    return null;
+  };
+
   const activate = (name: string): ProfileMetadata | undefined => {
     const profiles = loadAllProfiles(cmd.cwd);
     const target = profiles.get(name.toLowerCase());
     if (!target) return undefined;
     activeProfile = target.name;
+    cmd.state?.set('activeProfile', target.name);
+    cmd.session?.appendCustomEntry({
+      customType: SESSION_ENTRY_TYPE,
+      data: {persona: target.name},
+    });
     setStatus(`righthand: ${target.label} [${target.mode}]`);
     return target;
   };
 
+  const deactivate = (): void => {
+    activeProfile = null;
+    cmd.state?.set('activeProfile', null);
+    cmd.session?.appendCustomEntry({
+      customType: SESSION_ENTRY_TYPE,
+      data: {persona: null},
+    });
+    setStatus(null);
+  };
+
+  const syncState = (): void => {
+    activeProfile = undefined;
+    const name = resolveActiveProfile();
+    if (name) {
+      const profile = loadAllProfiles(cmd.cwd).get(name);
+      if (profile) {
+        setStatus(`righthand: ${profile.label} [${profile.mode}]`);
+      } else {
+        setStatus(null);
+      }
+    } else {
+      setStatus(null);
+    }
+  };
+
   cmd.hooks({
+    onSessionStart: () => {
+      syncState();
+    },
     appendSystemPrompt: () => {
-      if (!activeProfile) return undefined;
+      const currentName = resolveActiveProfile();
+      if (!currentName) return undefined;
       const profiles = loadAllProfiles(cmd.cwd);
-      const current = profiles.get(activeProfile);
+      const current = profiles.get(currentName);
       if (!current) return undefined;
       return `## Active RightHand persona: ${current.label} (${current.mode})\nHerdr Tab: ${current.herdrTab || current.name}\n\n${current.body}`;
     },
@@ -195,6 +273,7 @@ export default function (cmd: ModApi): void {
   const commandHandler = async ({args}: {args: string}) => {
     const arg = args.trim().toLowerCase();
     const profiles = loadAllProfiles(cmd.cwd);
+    const currentName = resolveActiveProfile();
 
     // Interactive pick
     if (!arg || arg === 'pick') {
@@ -202,7 +281,7 @@ export default function (cmd: ModApi): void {
       const picked = await cmd.ui.select({
         title: 'Select RightHand Agent Persona',
         options: sorted.map((p) => {
-          const activePrefix = p.name === activeProfile ? '[ACTIVE] ' : '';
+          const activePrefix = p.name === currentName ? '[ACTIVE] ' : '';
           const modeBadge = `[${p.mode.toUpperCase()}]`;
           return {
             label: p.name,
@@ -236,7 +315,7 @@ export default function (cmd: ModApi): void {
       const cards = [...profiles.values()]
         .sort((a, b) => a.name.localeCompare(b.name))
         .map((p) => {
-          const isCurrent = p.name === activeProfile;
+          const isCurrent = p.name === currentName;
           const marker = isCurrent ? '▶ ' : '• ';
           const status = isCurrent ? ' [ACTIVE]' : '';
           const mode = `[${p.mode.toUpperCase()}]`;
@@ -262,8 +341,7 @@ export default function (cmd: ModApi): void {
 
     // Turn off profile
     if (arg === 'off' || arg === 'default') {
-      activeProfile = null;
-      setStatus(null);
+      deactivate();
       return {message: 'Persona deactivated — restored default agent behavior.'};
     }
 
@@ -298,15 +376,9 @@ export default function (cmd: ModApi): void {
   });
 
   cmd.on('session_start', () => {
-    const def = cmd.getFlag('default');
-    if (typeof def === 'string' && def.trim()) {
-      const profile = activate(def.trim().toLowerCase());
-      if (!profile) {
-        cmd.ui.notify(`Default profile "${def}" not found in profiles folder.`, 'warning');
-      }
-      return;
-    }
-    const current = activeProfile ? loadAllProfiles(cmd.cwd).get(activeProfile) : undefined;
-    setStatus(current ? `righthand: ${current.label} [${current.mode}]` : null);
+    syncState();
   });
+
+  // Run immediately on load / reload
+  syncState();
 }
