@@ -38,7 +38,7 @@ param(
     [string]$Description = ""
 )
 
-$WriterRoles = @('backend', 'frontend', 'devops', 'worker')
+$WriterRoles = @('backend', 'frontend', 'devops', 'worker', 'editor')
 $IsWriter = $WriterRoles -contains $Role.ToLower()
 
 $Label = if ($Ticket) { "$Role-$Ticket" } else { $Role }
