@@ -194,6 +194,67 @@ npm run typecheck
 
 ---
 
+# RightHand — Cross-harness Availability (Phase 1)
+
+## Command Code (runtime switch)
+
+On Command Code, `/righthand <persona>` switches the active persona for the whole session; the mod in `mods/righthand.ts` injects the selected persona via `appendSystemPrompt`.
+
+On every other harness, personas are available as portable **skills** (`skills/righthand-<persona>/SKILL.md`). Activate one by requesting that skill in your conversation/task.
+
+## Install across harnesses
+
+### Plugin-door installs
+| Harness | Command |
+|---|---|
+| Claude Code | `/plugin marketplace add https://github.com/agirahman/righthand` then `/plugin install righthand@righthand` |
+| Codex | `codex plugin marketplace add agirahman/righthand`; `codex plugin add righthand@righthand` |
+| Cursor | `agent plugin marketplace add https://github.com/agirahman/righthand` then install from Customize panel |
+| Kimi Code | `/plugins install https://github.com/agirahman/righthand` |
+| Oh My Pi | `omp plugin marketplace add agirahman/righthand`; `omp plugin install righthand@righthand` |
+| Antigravity | `agy plugin install https://github.com/agirahman/righthand` |
+| Cline (CLI) | `cline plugin install https://github.com/agirahman/righthand.git` |
+
+### Package install
+| Harness | Command |
+|---|---|
+| Pi | `pi install git:github.com/agirahman/righthand` |
+
+### Shared-folder install
+For harnesses that scan skills under a shared `.agents/skills/` (OpenCode, Amp, Antigravity project, Copilot), clone the repo and point the harness at `skills/` (or copy it), then trigger a persona skill by request.
+
+### Single-file bundle
+No single-file bundle in MVP. Use per-skill files under `skills/`. Future phases may add a combined bundle.
+
+## Commands and modes
+
+- Runtime `/righthand` switch: **Command Code only**.
+- On other harnesses:
+  - Use a persona: "use righthand-backend" or reference `skills/righthand-backend/SKILL.md`.
+  - Worktree/workflow isolation still applies to writer personas (`backend`,`frontend`,`devops`,`worker`,`editor`) via `scripts/herdr-spawn.*`.
+  - readonly personas inspect main checkout directly.
+
+## Personas
+
+12 personas shipped (7 `readonly`, 5 `writer`):
+
+- readonly: `orchestrator`, `product-manager`, `architect`, `code-reviewer`, `security-auditor`, `test-engineer`, `web-performance-auditor`
+- writer: `worker`, `backend`, `frontend`, `editor`, `devops`
+
+## Limitations (MVP)
+
+- `/righthand` interactive switching is Command Code-only; elsewhere switch via skill activation.
+- Native command shims (`.claude/commands`, `.pi/extensions`, `.opencode/plugins`) are not yet shipped; planned Phase 2.
+- Herdr orchestration remains driven by existing `scripts/herdr-spawn.*`.
+
+## Validation
+
+```
+npm test           # profiles + skills + manifests
+npm run typecheck  # TypeScript
+npm run build      # compile dist/
+```
+
 ## Roadmap
 
 Planned enhancements for future updates:

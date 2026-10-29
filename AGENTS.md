@@ -1,4 +1,10 @@
-# Memory
+## Harness Support Pointers (Phase 1)
+
+RightHand cross-harness personas are portable from the `skills/` directory. See:
+- `GUIDE.md` for install routes
+- `README.md` section "Cross-harness availability" for commands and role boundaries.
+
+The Command Code runtime switch (`/righthand`) remains available only under Command Code; on other harnesses, activate a persona by requesting its `righthand-<persona>` skill.
 
 ## Project Overview
 See @README.md for project overview and @package.json for available npm/pnpm commands for this project.

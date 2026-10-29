@@ -1,53 +1,81 @@
 {
-  "name": "@agirahman/righthand",
-  "version": "1.0.3",
-  "description": "RightHand: specialist agent personas and multi-agent orchestration for Herdr workspaces across coding harnesses",
-  "main": "dist/mods/righthand.js",
-  "types": "dist/mods/righthand.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/agirahman/righthand.git"
-  },
-  "commandcode": {
-    "mods": [
-      "./mods/righthand.ts"
-    ]
-  },
-  "scripts": {
-    "build": "tsc",
-    "typecheck": "tsc --noEmit",
-    "test": "node test/validate-profiles.cjs"
-  },
-  "keywords": [
-    "cmd-mod",
-    "cmd-mod-command",
-    "cmd-mod-hook",
-    "righthand",
-    "herdr",
-    "commandcode",
-    "agents",
-    "personas",
-    "orchestration",
-    "addyosmani",
-    "worktrees"
-  ],
-  "author": {
-    "name": "agi",
-    "url": "https://github.com/agirahman"
-  },
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
-  "files": [
-    "mods",
-    "profiles",
-    "scripts",
-    "types",
-    "README.md"
-  ],
-  "devDependencies": {
-    "@types/node": "^20.11.0",
-    "typescript": "^5.3.3"
-  }
+    "name":  "@agirahman/righthand",
+    "version":  "1.0.3",
+    "description":  "RightHand: specialist agent personas and multi-agent orchestration for Herdr workspaces across coding harnesses",
+    "main":  "dist/mods/righthand.js",
+    "types":  "dist/mods/righthand.d.ts",
+    "repository":  {
+                       "type":  "git",
+                       "url":  "git+https://github.com/agirahman/righthand.git"
+                   },
+    "commandcode":  {
+                        "mods":  [
+                                     "./mods/righthand.ts"
+                                 ]
+                    },
+    "pi":  {
+               "skills":  [
+                              "./skills"
+                          ]
+           },
+    "cline":  {
+                  "plugins":  [
+                                  {
+                                      "paths":  [
+                                                    "./.cline-plugin/plugin.js"
+                                                ],
+                                      "capabilities":  [
+                                                           "skills"
+                                                       ]
+                                  }
+                              ]
+              },
+    "scripts":  {
+                    "build":  "tsc",
+                    "typecheck":  "tsc --noEmit",
+                    "test":  "node test/validate-profiles.cjs \u0026\u0026 node test/validate-skills.cjs"
+                },
+    "keywords":  [
+                     "cmd-mod",
+                     "cmd-mod-command",
+                     "cmd-mod-hook",
+                     "righthand",
+                     "herdr",
+                     "commandcode",
+                     "agents",
+                     "personas",
+                     "orchestration",
+                     "addyosmani",
+                     "worktrees"
+                 ],
+    "author":  {
+                   "name":  "agirahman",
+                   "url":  "https://github.com/agirahman"
+               },
+    "license":  "MIT",
+    "publishConfig":  {
+                          "access":  "public"
+                      },
+    "files":  [
+                  "mods",
+                  "profiles",
+                  "skills",
+                  "rules",
+                  "scripts",
+                  "types",
+                  "README.md",
+                  "GUIDE.md",
+                  ".claude-plugin",
+                  ".codex-plugin",
+                  ".cursor-plugin",
+                  ".kimi-plugin",
+                  ".omp-plugin",
+                  ".agents",
+                  ".cline-plugin",
+                  "plugin.json"
+              ],
+    "devDependencies":  {
+                            "@types/node":  "^20.11.0",
+                            "typescript":  "^5.3.3"
+                        }
 }
