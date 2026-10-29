@@ -1,19 +1,13 @@
 {
-    "name":  "righthand",
-    "version":  "1.0.3",
-    "description":  "Specialist agent personas and multi-agent orchestration engine for Herdr workspaces across coding harnesses.",
-    "author":  {
-                   "name":  "agirahman"
-               },
-    "homepage":  "https://github.com/agirahman/righthand",
-    "repository":  "https://github.com/agirahman/righthand",
-    "license":  "MIT",
-    "keywords":  [
-                     "righthand",
-                     "herdr",
-                     "agents",
-                     "personas",
-                     "skills"
-                 ],
-    "skills":  "./skills/"
+  "name": "righthand",
+  "version": "1.0.3",
+  "description": "Specialist agent personas and multi-agent orchestration engine for Herdr workspaces across coding harnesses.",
+  "author": {
+    "name": "agirahman"
+  },
+  "homepage": "https://github.com/agirahman/righthand",
+  "repository": "https://github.com/agirahman/righthand",
+  "license": "MIT",
+  "keywords": ["righthand", "herdr", "agents", "personas", "skills"],
+  "skills": "./skills/"
 }
