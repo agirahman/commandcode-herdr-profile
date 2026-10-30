@@ -1,22 +1,45 @@
 {
   "name": "@agirahman/righthand",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "RightHand: specialist agent personas and multi-agent orchestration for Herdr workspaces across coding harnesses",
-  "main": "dist/mods/righthand.js",
-  "types": "dist/mods/righthand.d.ts",
+  "main": "dist/.commandcode/mods/righthand.js",
+  "types": "dist/.commandcode/mods/righthand.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/agirahman/righthand.git"
   },
   "commandcode": {
     "mods": [
-      "./mods/righthand.ts"
+      "./.commandcode/mods/righthand.ts"
     ]
+  },
+  "pi": {
+    "extensions": [
+      "./.pi/extensions/righthand.ts"
+    ],
+    "skills": [
+      "./skills"
+    ]
+  },
+  "cline": {
+    "plugins": [
+      {
+        "paths": [
+          "./.cline-plugin/plugin.js"
+        ],
+        "capabilities": [
+          "skills"
+        ]
+      }
+    ]
+  },
+  "bin": {
+    "righthand": "./bin/righthand.js"
   },
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit",
-    "test": "node test/validate-profiles.cjs"
+    "test": "node test/validate-profiles.cjs \u0026\u0026 node test/validate-skills.cjs"
   },
   "keywords": [
     "cmd-mod",
@@ -40,11 +63,22 @@
     "access": "public"
   },
   "files": [
-    "mods",
+    "dist",
+    ".commandcode",
+    ".pi",
+    ".opencode",
+    ".omp",
+    "bin",
     "profiles",
+    "skills",
+    "rules",
     "scripts",
     "types",
-    "README.md"
+    "README.md",
+    "GUIDE.md",
+    "CONTRIBUTING.md",
+    "LICENSE",
+    ".agents"
   ],
   "devDependencies": {
     "@types/node": "^20.11.0",

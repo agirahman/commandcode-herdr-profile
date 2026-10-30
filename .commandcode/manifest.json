@@ -1,0 +1,11 @@
+{
+  "name": "righthand",
+  "mods": [
+    "./mods/righthand.ts"
+  ],
+  "profilesDir": "./profiles",
+  "commands": [
+    "righthand",
+    "profile"
+  ]
+}

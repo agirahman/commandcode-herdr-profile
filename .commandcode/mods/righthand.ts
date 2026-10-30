@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Mod `righthand`: switch agent persona via `/righthand <name>` (or `/profile <name>`).
  * Multi-agent orchestration engine for Herdr workspaces, adapted from Addy Osmani agent-skills architecture.
  *

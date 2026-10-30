@@ -8,6 +8,9 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-blue.svg)](https://www.typescriptlang.org/)
 [![npm](https://img.shields.io/npm/v/@agirahman/righthand.svg)](https://www.npmjs.com/package/@agirahman/righthand)
 [![Command Code](https://img.shields.io/badge/Command%20Code-Mod-purple.svg)](https://commandcode.ai/)
+[![Pi](https://img.shields.io/badge/Pi-Extension-cyan.svg)](https://github.com/mario-dn/pi)
+[![OpenCode](https://img.shields.io/badge/OpenCode-Plugin-green.svg)](https://opencode.ai/)
+[![Oh My Pi](https://img.shields.io/badge/Oh%20My%20Pi-Extension-magenta.svg)](https://github.com/can1357/oh-my-pi)
 [![Herdr](https://img.shields.io/badge/Orchestration-Herdr-orange.svg)](https://herdr.dev/)
 
 </div>
@@ -16,26 +19,22 @@
 
 ## Overview
 
-`righthand` acts as your executive second-in-command for multi-agent workflows in [Herdr](https://herdr.dev/). It provides a modular persona engine and curated specialist roles designed for autonomous pair-programming, ticket-driven delegation, and workspace isolation across coding harnesses.
+`righthand` acts as your executive second-in-command for multi-agent workflows in [Herdr](https://herdr.dev/) and standalone coding harnesses. It provides a modular persona engine and curated specialist roles designed for autonomous pair-programming, ticket-driven delegation, and workspace isolation across coding harnesses.
 
-Instead of treating an AI agent as a generic monolith, RightHand injects targeted personas via Command Code's `appendSystemPrompt` hook. Each persona maintains a single perspective, follows rigid output standards, and operates with clear execution boundaries.
+Instead of treating an AI agent as a generic monolith, RightHand injects targeted personas via native extensions and hooks across supported harnesses (**Command Code**, **Pi**, **OpenCode**, **Oh My Pi**) or via portable skill standards. Each persona maintains a single perspective, follows rigid output standards, and operates with clear execution boundaries.
 
 ### Architectural Principles
-
-This mod focuses on targeted persona injection and workspace isolation:
 
 - **Single-Perspective Personas**: Each persona embodies a specialized engineering role with a clear evaluation lens, rigid output format, and strict execution boundaries.
 - **No Recursive Persona Invocations**: Personas do not invoke other personas at runtime. Multi-agent coordination occurs at the user or orchestrator level across Herdr tabs.
 - **Ticket & Worktree Isolation**: Sub-agents communicate through explicit tickets, structured reports, and isolated git worktrees rather than unstructured shared state.
-
-> [!IMPORTANT]
-> **Personas do not invoke other personas.** Orchestration occurs at the user or orchestrator level via Herdr tabs. Sub-agents communicate through tickets, reports, and isolated git worktrees rather than recursive runtime calls.
+- **Dedicated Harness Folders**: Native extensions and plugins are maintained in clean, harness-specific folders (`.commandcode/`, `.pi/`, `.omp/`, `.opencode/`), backed by a unified CLI and state engine.
 
 ---
 
 ## Persona Catalog
 
-The catalog combines developer team roles with Addy Osmani's specialized audit personas:
+The catalog combines developer team roles with Addy Osmani's specialized audit personas (12 personas: 7 `readonly`, 5 `writer`):
 
 | Profile | Mode | Role Title | Core Focus | Output Framework / Deliverable |
 |---|---|---|---|---|
@@ -54,87 +53,77 @@ The catalog combines developer team roles with Addy Osmani's specialized audit p
 
 ---
 
-## Installation
+## Unified CLI (`righthand`)
 
-### 1. Via Command Code CLI (Recommended)
-
-Install directly from npm across your environment:
+RightHand includes a built-in CLI for inspecting and switching active personas across all harnesses. Active persona state is persistently stored in `.righthand/active-persona.json`.
 
 ```bash
-# Install globally for all projects (user scope)
-cmdc mods add -g @agirahman/righthand
+# Display all 12 personas and current active state
+righthand list
 
-# Or install for the current project only
-cmdc mods add @agirahman/righthand
+# Switch to a persona
+righthand switch backend
+righthand switch security-auditor
+# Shortcut:
+righthand frontend
+
+# Output the active persona prompt (for prompt injection or shell pipelines)
+righthand inject
+
+# Reset to default agent behavior
+righthand off
 ```
-
-### 2. Manual Global Installation (User Level)
-
-Alternatively, copy the files manually into your user configuration (`~/.commandcode/`):
-
-#### Windows (PowerShell)
-
-```powershell
-# Create destination directories
-New-Item -ItemType Directory -Force "$HOME\.commandcode\mods"
-New-Item -ItemType Directory -Force "$HOME\.commandcode\profiles"
-
-# Copy mod engine and profile files
-Copy-Item ".\mods\righthand.ts" "$HOME\.commandcode\mods\righthand.ts" -Force
-Copy-Item ".\profiles\*.md" "$HOME\.commandcode\profiles\" -Force
-```
-
-#### macOS / Linux (POSIX sh)
-
-```bash
-# Create destination directories
-mkdir -p ~/.commandcode/mods ~/.commandcode/profiles
-
-# Copy mod engine and profile files
-cp ./mods/righthand.ts ~/.commandcode/mods/righthand.ts
-cp ./profiles/*.md ~/.commandcode/profiles/
-```
-
-### Local Project Overrides
-
-To customize or extend profiles for a specific codebase, place markdown profile files in:
-- `<project-root>/.commandcode/profiles/*.md`
-- `<project-root>/profiles/*.md`
-
-The mod loads project-level profiles with precedence over global user-level profiles.
 
 ---
 
-## Usage in Command Code
+## Supported Harnesses & Installation
 
-### Slash Commands
+### 1. Command Code (`.commandcode/`)
+RightHand was originally built as a first-class Command Code mod.
 
-Once installed, use `/righthand` (or its alias `/profile`) within any Command Code session:
+- **Install via CLI**:
+  ```bash
+  cmdc mods add -g @agirahman/righthand
+  ```
+- **Slash Commands in session**:
+  - `/righthand` or `/profile` — open fuzzy picker or show active persona.
+  - `/righthand <persona>` — switch persona on-the-fly.
+  - `/righthand off` — restore default prompt.
+- **Details**: See [`.commandcode/README.md`](./.commandcode/README.md).
 
-```bash
-# Launch interactive fuzzy picker
-/righthand
-# (or /profile)
+### 2. Pi Coding Agent (`.pi/`)
+Pi supports native extensions that hook agent lifecycle events.
 
-# Switch directly to a persona
-/righthand backend
-/righthand code-reviewer
-/righthand orchestrator
+- **Setup**: Place or symlink [`.pi/extensions/righthand.ts`](./.pi/extensions/righthand.ts) into your project's `.pi/extensions/` or global `~/.pi/agent/extensions/`.
+- **Slash Command**:
+  - `/righthand <persona>` — interactive slash command with full tab-autocomplete for all 12 personas.
+  - `/righthand off` — clear persona.
+- **Status Indicator**: Displays current persona badge in the Pi UI status bar.
+- **Details**: See [`.pi/README.md`](./.pi/README.md).
 
-# Display all available personas with detailed roles and Herdr tabs
-/righthand list
+### 3. Oh My Pi (`.omp/`)
+Oh My Pi automatically discovers native extensions placed in `<cwd>/.omp/extensions/`.
 
-# Deactivate the current persona and restore default behavior
-/righthand off
-```
+- **Setup**: Place [`.omp/extensions/righthand.ts`](./.omp/extensions/righthand.ts) in `.omp/extensions/`.
+- **Behavior**: Auto-discovered by OMP runtime without manual plugin trust approval prompts. Hooks `before_agent_start` and registers `/righthand`.
+- **Details**: See [`.omp/README.md`](./.omp/README.md).
 
-### Session Startup Flag
+### 4. OpenCode (`.opencode/`)
+OpenCode uses server plugins and runtime prompt injection.
 
-You can initialize a Command Code session with a persona pre-selected:
+- **Setup**: Place [`.opencode/plugins/righthand.js`](./.opencode/plugins/righthand.js) in `.opencode/plugins/`.
+- **CLI Ingestion**: Use `righthand switch <persona>` and inject into your OpenCode session:
+  ```bash
+  opencode run "$(righthand inject) <your query>"
+  ```
+- **Details**: See [`.opencode/README.md`](./.opencode/README.md).
 
-```bash
-cmdc --mod-option default=backend
-```
+### 5. Cross-Harness Portable Skills (`skills/`)
+For harnesses that support portable Agent Skills or custom plugins (Claude Code, Cursor, Codex, Kimi Code, Cline):
+
+- Persona skills are available under `skills/righthand-<persona>/SKILL.md`.
+- Activate by requesting the persona in conversation (e.g., *"Act as righthand-backend"*).
+- Compatible plugin manifests are included: `.claude-plugin/`, `.cursor-plugin/`, `.codex-plugin/`, `.kimi-plugin/`, `.cline-plugin/`, and `.agents/`.
 
 ---
 
@@ -144,11 +133,11 @@ cmdc --mod-option default=backend
 
 ### Worktree Isolation for Writer Personas
 
-To prevent conflicts when multiple agents work in parallel within the same repository, writer roles (`backend`, `frontend`, `editor`, `devops`, `worker`) must operate in dedicated, ticket-prefixed git worktrees:
+To prevent merge conflicts when multiple agents work simultaneously on the same repository, writer roles (`backend`, `frontend`, `editor`, `devops`, `worker`) must operate in isolated, ticket-prefixed git worktrees:
 
 ```bash
 # Worktree format: wt/<ticket-id>-<slug>
-git worktree add "wt/T1-integration-backend" -b "T1-integration-backend"
+git worktree add "wt/T1-auth-api" -b "T1-auth-api"
 ```
 
 Readonly roles (`orchestrator`, `architect`, `code-reviewer`, `security-auditor`, `test-engineer`, `web-performance-auditor`, `product-manager`) inspect the main working tree directly without spawning worktree branches.
@@ -157,46 +146,39 @@ Readonly roles (`orchestrator`, `architect`, `code-reviewer`, `security-auditor`
 
 Helper scripts automate creating Herdr workspace tabs and provisioning ticket worktrees:
 
-#### PowerShell Helper (`scripts/herdr-spawn.ps1`)
-
+#### PowerShell (`scripts/herdr-spawn.ps1`)
 ```powershell
 .\scripts\herdr-spawn.ps1 -Workspace "w1" -Role "backend" -Ticket "T1" -Description "auth-api"
 ```
 
-#### Bash Helper (`scripts/herdr-spawn.sh`)
-
+#### POSIX Shell (`scripts/herdr-spawn.sh`)
 ```bash
 ./scripts/herdr-spawn.sh w1 backend T1 auth-api
 ```
 
-The script performs the following sequence:
-1. Validates the persona mode (`writer` vs `readonly`).
-2. Generates an isolated git branch and worktree at `wt/T1-auth-api` for writer roles.
-3. Invokes `herdr tab create --workspace w1 --label backend-T1`.
-4. Outputs the exact command to launch Command Code in the target tab.
-
-> [!TIP]
-> Use `orchestrator` as the lead agent in your main Herdr tab. When you submit a feature request, the orchestrator outputs an atomic ticket table (`T1`, `T2`, `T3`, ...) and delegates tasks across worker tabs.
-
 ---
 
-## Validation & Quality Assurance
-
-Ensure TypeScript types and persona definitions pass integrity checks:
+## Testing & Validation
 
 ```bash
-# Validate frontmatter keys, schema conformity, and composition blocks
+# Validate all persona profiles, cross-harness skills, and plugin manifests
 npm test
 
-# Verify TypeScript compilation of the mod engine
+# Typecheck TypeScript across all harness extensions
 npm run typecheck
+
+# Build compiled output to dist/
+npm run build
 ```
 
 ---
 
-## Roadmap
+## Contributing
 
-Planned enhancements for future updates:
-- **Bundled Skills Layer**: Ship dedicated workflow skills (such as test-driven development and systematic debugging) directly inside the package.
-- **Orchestrator Skill Delegation**: Enable the lead orchestrator to attach specialized workflow skills dynamically when dispatching tickets to worker personas.
-- **Automated Worktree Lifecycle Management**: Automated cleanup, status verification, and merge tooling for completed ticket worktree branches.
+Contributions are welcome! Please read our [CONTRIBUTING.md](./CONTRIBUTING.md) for details on our code style, persona frontmatter specifications, and testing workflow.
+
+---
+
+## License
+
+RightHand is licensed under the [MIT License](./LICENSE).
