@@ -51,19 +51,17 @@ On Windows use `Copy-Item -Recurse`.
 1. Clone the repo.
 2. Launch your harness inside repo directory (verify it reads root skils).
 
-## Usage modes (MVP)
+## Usage modes
 
-- `/righthand` runtime switching is Command Code-only.
-- On other harnesses, ask explicitly: "Use righthand-backend skill for this task" or "Switch to orchestrator persona".
+- Native `/righthand` slash commands and interactive persona switching are supported in **Command Code**, **Pi**, **Oh My Pi**, **OpenCode**, and via the **RightHand CLI** (`righthand switch <persona>`).
+- On other harnesses (Claude Code, Cursor, Codex, Kimi, Cline), activate by requesting the persona in conversation: *"Act as righthand-backend"* or *"Use the righthand-orchestrator skill"*.
 - Writer personas should run in isolated git worktrees (`wt/<ticket>-<slug>`), using `scripts/herdr-spawn.*`.
 
 ## Verification
 
 After install, list available skills (harness UI or CLI). You should see 12 `righthand-*` personas.
 
-## Known limitations (MVP)
+## Known limitations
 
-- No native slash command shim beyond Command Code (`/profile`/`/righthand`).
-- No orchestration automation; use `herdr-spawn.*`.
-- No single-file bundle (Phase 2).
-- No combined "righthand-all" persona bundle yet.
+- For harnesses without native extension APIs (Claude Code, Cursor, Codex), persona switching relies on standard skill activation prompts rather than UI pickers.
+- Multi-agent tab orchestration relies on Herdr workspace tabs and `herdr-spawn.*` scripts.
