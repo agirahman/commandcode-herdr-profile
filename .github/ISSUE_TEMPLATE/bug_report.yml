@@ -1,0 +1,116 @@
+name: Bug report
+description: Something in a persona, skill, harness extension, or CLI is not working as expected.
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please provide details so we can reproduce and address the issue efficiently.
+
+  - type: dropdown
+    id: harness
+    attributes:
+      label: Target Harness / AI Agent
+      description: Which coding agent harness or environment were you using RightHand in?
+      options:
+        - Command Code
+        - Pi (.pi)
+        - Oh My Pi (.omp)
+        - OpenCode (.opencode)
+        - Cursor (.cursor-plugin)
+        - DeepSeek Harness (DSH)
+        - Claude Code (.claude-plugin)
+        - Codex (.codex-plugin)
+        - Cline (.cline-plugin)
+        - Kimi (.kimi-plugin)
+        - CLI Executable (bin/righthand.js)
+        - Other / Not Applicable
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: RightHand Version
+      description: The version from `righthand --version` or `package.json`.
+      placeholder: 1.2.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: persona
+    attributes:
+      label: Affected Persona or Component
+      options:
+        - All / Core Engine
+        - CLI (righthand switch / inject)
+        - architect (Software Architect)
+        - backend (Backend Engineer)
+        - code-reviewer (Senior Code Reviewer)
+        - devops (DevOps Engineer)
+        - editor (Video & Motion Editor)
+        - frontend (Frontend Engineer)
+        - orchestrator (Team Orchestrator)
+        - product-manager (Product Manager)
+        - security-auditor (Security Auditor)
+        - test-engineer (Test Engineer)
+        - web-performance-auditor (Web Performance Auditor)
+        - worker (General Worker)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: install-route
+    attributes:
+      label: How it was installed
+      options:
+        - Global npm package (@agirahman/righthand)
+        - Harness Extension / Plugin Marketplace
+        - Cloned repository
+        - Direct npx execution
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Windows
+        - macOS
+        - Linux
+    validations:
+      required: true
+
+  - type: textarea
+    id: command
+    attributes:
+      label: What was run / prompt given
+      description: The exact command or prompt executed.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What was expected
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened
+    validations:
+      required: true
+
+  - type: textarea
+    id: output
+    attributes:
+      label: Output / Error Logs
+      description: Paste any error messages, stack traces, or console output.
+      render: shell
+    validations:
+      required: false

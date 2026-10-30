@@ -1,0 +1,55 @@
+name: Feature or Persona request
+description: Propose a new persona, skill capability, or harness integration for RightHand.
+title: "[Feature] "
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this issue form to propose new personas, skill expansions, or cross-harness integrations.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Request Category
+      options:
+        - New Persona Proposal
+        - Existing Persona Skill Expansion
+        - New Harness Integration
+        - CLI / Orchestration Feature
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: target
+    attributes:
+      label: Target Persona / Component / Harness
+      description: Name the specific persona or harness integration (e.g., `righthand-frontend`, `OpenCode extension`, `New DevOps persona capability`).
+      placeholder: righthand-backend or new-persona-name
+    validations:
+      required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Proposed Capability or Feature
+      description: What should RightHand do, or what new persona capability is needed?
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case & Rationale
+      description: Why is this needed, and how does it improve AI agent orchestration?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution or Implementation Notes
+      description: Any suggested prompt design, frontmatter mode (`readonly` / `writer`), hook integration, or CLI flags.
+    validations:
+      required: false

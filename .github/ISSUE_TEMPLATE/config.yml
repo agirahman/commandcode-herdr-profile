@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Installation & Guide
+    url: https://github.com/agirahman/righthand/blob/main/GUIDE.md
+    about: Walkthrough covering cross-harness installation and usage.
+  - name: Contributor & Agent Guide
+    url: https://github.com/agirahman/righthand/blob/main/AGENTS.md
+    about: Workflow and pre-submission checks for human and AI contributors.
+  - name: Persona System Architecture
+    url: https://github.com/agirahman/righthand/blob/main/README.md
+    about: Overview of RightHand personas, modes, and harness integrations.
