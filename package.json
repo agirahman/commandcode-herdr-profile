@@ -1,12 +1,18 @@
 {
   "name": "@agirahman/righthand",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "RightHand: specialist agent personas and multi-agent orchestration for Herdr workspaces across coding harnesses",
   "main": "dist/.commandcode/mods/righthand.js",
   "types": "dist/.commandcode/mods/righthand.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/agirahman/righthand.git"
+  },
+  "opencode": {
+    "plugins": [
+      "./.opencode/plugins/righthand-server.js",
+      "./.opencode/plugins/righthand-tui.js"
+    ]
   },
   "commandcode": {
     "mods": [
@@ -45,6 +51,7 @@
     "cmd-mod",
     "cmd-mod-command",
     "cmd-mod-hook",
+    "pi-package",
     "righthand",
     "herdr",
     "commandcode",

@@ -53,26 +53,49 @@ The catalog combines developer team roles with Addy Osmani's specialized audit p
 
 ---
 
-## Unified CLI (`righthand`)
-
-RightHand includes a built-in CLI for inspecting and switching active personas across all harnesses. Active persona state is persistently stored in `.righthand/active-persona.json`.
+## Quick Setup
 
 ```bash
-# Display all 12 personas and current active state
-righthand list
+# 1. Install globally
+npm install -g @agirahman/righthand
 
-# Switch to a persona
-righthand switch backend
-righthand switch security-auditor
-# Shortcut:
-righthand frontend
+# 2. Set up a harness (copies or installs the native integration)
+righthand setup cmdc        # Command Code (Linux/macOS: cmd, Windows: cmdc)
+righthand setup pi          # Pi Coding Agent
+righthand setup omp         # Oh My Pi (copies to .omp/extensions/)
+righthand setup opencode    # OpenCode (copies two plugins to .opencode/plugins/)
+righthand setup all         # Set up every detected harness at once
 
-# Output the active persona prompt (for prompt injection or shell pipelines)
-righthand inject
-
-# Reset to default agent behavior
-righthand off
+# 3. Check health
+righthand doctor
 ```
+
+---
+
+## Unified CLI (`righthand`)
+
+RightHand includes a built-in CLI for managing personas and harness integrations.
+
+```bash
+# --- Persona Commands ---
+righthand list                   # List all 12 personas + active state
+righthand switch backend         # Activate a persona
+righthand switch security-auditor
+righthand off                    # Deactivate persona (restore default)
+righthand inject                 # Print active persona prompt to stdout
+righthand status                 # One-liner: active persona + setup harnesses
+
+# --- Setup & Maintenance ---
+righthand setup <harness|all>    # Install RightHand into a harness
+righthand update [harness]       # Re-sync files for omp/opencode after npm update
+righthand doctor                 # Health check: PATH, files, active persona
+
+# --- Info ---
+righthand -v / --version         # Print version
+righthand -h / --help            # Print help
+```
+
+Active persona state is stored in `.righthand/active-persona.json` (per project, gitignored).
 
 ---
 
@@ -81,9 +104,10 @@ righthand off
 ### 1. Command Code (`.commandcode/`)
 RightHand was originally built as a first-class Command Code mod.
 
-- **Install via CLI**:
+- **Install via CLI** (Linux/macOS: `cmd`, Windows: `cmdc` — auto-detected):
   ```bash
-  cmdc mods add -g @agirahman/righthand
+  righthand setup cmdc
+  # Runs internally: cmdc mods add -g @agirahman/righthand
   ```
 - **Slash Commands in session**:
   - `/righthand` or `/profile` — open fuzzy picker or show active persona.
@@ -94,7 +118,11 @@ RightHand was originally built as a first-class Command Code mod.
 ### 2. Pi Coding Agent (`.pi/`)
 Pi supports native extensions that hook agent lifecycle events.
 
-- **Setup**: Place or symlink [`.pi/extensions/righthand.ts`](./.pi/extensions/righthand.ts) into your project's `.pi/extensions/` or global `~/.pi/agent/extensions/`.
+- **Install via CLI**:
+  ```bash
+  righthand setup pi
+  # Runs internally: pi install npm:@agirahman/righthand
+  ```
 - **Slash Command**:
   - `/righthand <persona>` — interactive slash command with full tab-autocomplete for all 12 personas.
   - `/righthand off` — clear persona.
@@ -104,18 +132,28 @@ Pi supports native extensions that hook agent lifecycle events.
 ### 3. Oh My Pi (`.omp/`)
 Oh My Pi automatically discovers native extensions placed in `<cwd>/.omp/extensions/`.
 
-- **Setup**: Place [`.omp/extensions/righthand.ts`](./.omp/extensions/righthand.ts) in `.omp/extensions/`.
-- **Behavior**: Auto-discovered by OMP runtime without manual plugin trust approval prompts. Hooks `before_agent_start` and registers `/righthand`.
+- **Setup**:
+  ```bash
+  righthand setup omp
+  # Copies .omp/extensions/righthand.ts into <cwd>/.omp/extensions/
+  ```
+- **Behavior**: Auto-discovered by OMP runtime without manual plugin trust approval prompts. Hooks `before_agent_start` and registers `/righthand` with interactive picker.
+- **Update after npm upgrade**: `righthand update omp`
 - **Details**: See [`.omp/README.md`](./.omp/README.md).
 
 ### 4. OpenCode (`.opencode/`)
-OpenCode uses server plugins and runtime prompt injection.
+OpenCode uses the native `@opencode/plugin` and `@opencode/plugin/tui` APIs.
 
-- **Setup**: Place [`.opencode/plugins/righthand.js`](./.opencode/plugins/righthand.js) in `.opencode/plugins/`.
-- **CLI Ingestion**: Use `righthand switch <persona>` and inject into your OpenCode session:
+- **Setup**:
   ```bash
-  opencode run "$(righthand inject) <your query>"
+  righthand setup opencode
+  # Copies two plugins into <cwd>/.opencode/plugins/
   ```
+- **Two plugins installed**:
+  - `righthand-server.js` — injects active persona into system prompt on every session context event (hooks `session.hook("context")`).
+  - `righthand-tui.js` — registers native `/righthand` slash command with interactive persona picker, footer status indicator, and toast notifications. State is stored per session in `~/.local/state/opencode/righthand.json`.
+- **Slash Command**: `/righthand <persona>` | `/righthand off` | `/righthand list` | `/righthand` (picker)
+- **Update after npm upgrade**: `righthand update opencode`
 - **Details**: See [`.opencode/README.md`](./.opencode/README.md).
 
 ### 5. Cross-Harness Portable Skills (`skills/`)

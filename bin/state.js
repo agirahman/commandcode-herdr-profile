@@ -26,4 +26,24 @@ function writeState(state, cwd = process.cwd()) {
   fs.writeFileSync(getStateFile(cwd), JSON.stringify(state, null, 2) + '\n');
 }
 
-module.exports = { getStateDir, getStateFile, readState, writeState };
+function getSetupFile(cwd = process.cwd()) {
+  return path.join(getStateDir(cwd), 'setup.json');
+}
+
+function readSetupState(cwd = process.cwd()) {
+  try {
+    const p = getSetupFile(cwd);
+    if (!fs.existsSync(p)) return { harnesses: [] };
+    return JSON.parse(fs.readFileSync(p, 'utf8'));
+  } catch {
+    return { harnesses: [] };
+  }
+}
+
+function writeSetupState(state, cwd = process.cwd()) {
+  const dir = getStateDir(cwd);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(getSetupFile(cwd), JSON.stringify(state, null, 2) + '\n');
+}
+
+module.exports = { getStateDir, getStateFile, readState, writeState, readSetupState, writeSetupState };
