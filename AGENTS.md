@@ -1,59 +1,75 @@
-## Harness Support Pointers (Phase 1)
+# RightHand Contributor & Agent Guide
 
-RightHand cross-harness personas are portable from the `skills/` directory. See:
-- `GUIDE.md` for install routes
-- `README.md` section "Cross-harness availability" for commands and role boundaries.
+Welcome to **RightHand**! This guide is intended for human contributors and AI agents working on this repository to understand the project structure, contribution workflow, persona system conventions, and mandatory pre-submission checks so you do not lose direction.
 
-The Command Code runtime switch (`/righthand`) remains available only under Command Code; on other harnesses, activate a persona by requesting its `righthand-<persona>` skill.
+---
 
-## Project Overview
-See @README.md for project overview and @package.json for available npm/pnpm commands for this project.
+## 1. Project Overview & Architecture
 
-## Code Style Guidelines
-- Use descriptive variable names
-- Follow existing patterns in the codebase
-- Extract complex conditions into meaningful boolean variables
+RightHand provides specialist AI agent personas and multi-agent orchestration across multiple coding harnesses:
+- **`.commandcode/`**: Command Code mod hooks and profile definitions.
+- **`.pi/`**: Pi native extension (`.pi/extensions/righthand.ts`).
+- **`.omp/`**: Oh My Pi native extension (`.omp/extensions/righthand.ts`).
+- **`.opencode/`**: OpenCode server and TUI plugins.
+- **`profiles/`**: Source persona profile definitions in Markdown with YAML frontmatter.
+- **`skills/`**: Portable cross-harness skill definitions (`skills/righthand-<persona>/SKILL.md`).
+- **`bin/`**: Unified CLI executable (`righthand switch`, `inject`, `list`, `off`).
+- **`test/`**: Validation test suites for profiles, skills, and cross-harness manifests.
 
-## Release Workflow (GitHub Releases & npm Registry)
+---
 
-Setiap ada perubahan kode atau fitur baru:
-1. **Bump Versi**:
-   - Update `version` di `package.json` (semver: patch/minor/major).
-2. **Build & Test**:
-   - `npm test` (validasi semua profil & persona).
-   - `npm run build` (compile TypeScript ke `dist/`).
-3. **Commit & Tag**:
-   - Commit perubahan: `git commit -m "..."` (jangan gunakan trailer bot).
-   - Buat tag git: `git tag v<version>` dan push: `git push origin main --tags` (atau `git push origin v<version>`).
-4. **Publish ke npm Registry**:
-   - `npm publish --access=public`
-5. **Buat GitHub Release**:
-   - Gunakan format judul release wajib:
-     `v<version>: <Rangkuman apa yang baru/diubah> version <version>`
-     *Contoh:* `v0.5.18: cached token tracking, provider fixes version 0.5.18`
-   - Isi deskripsi release harus terstruktur dengan section:
-     - `### Feat` (Fitur & kemampuan baru)
-     - `### Fix` (Perbaikan bug & masalah)
-     - `### Chore` (Maintenance manifest, build, dependency)
-   - Perintah CLI:
-     ```bash
-     gh release create v<version> --latest --title "v<version>: <summary> version <version>" --notes "### Feat
-- ...
+## 2. Public Contribution Workflow (Fork & Pull Request)
 
-### Fix
-- ...
+All external contributions follow the standard GitHub Fork and Pull Request model:
 
-### Chore
-- ..."
-     ```
+1. **Fork the Repository**:
+   - Create a fork of `agirahman/righthand` to your own GitHub account.
+2. **Create a Focused Topic Branch**:
+   - Create a topic branch naming the scope: `feat/<feature-name>`, `fix/<bug-name>`, or `chore/<task-name>`.
+3. **Keep Changes Minimal and Atomic**:
+   - Follow the rule of smallest effective change. Do not refactor unrelated files or introduce new dependencies without discussion.
+4. **Submit a Pull Request**:
+   - Push your topic branch to your fork and open a Pull Request targeting `main` on `agirahman/righthand`.
+   - Complete the PR template checklist in full.
 
-## Architecture Notes
-- RightHand persona engine disuntikkan via hook `appendSystemPrompt` Command Code.
-- Penamaan persona mengikuti format frontmatter Markdown Addy Osmani.
-- Pembagian mode: `readonly` untuk inspeksi langsung, `writer` untuk pembuatan git worktree isolasi (`wt/<ticket>-<slug>`).
+---
 
-## Common Workflows
-- Validasi profile: `npm test`
-- Build TypeScript: `npm run build`
-- Typecheck: `npm run typecheck`
+## 3. Mandatory Pre-PR Verification Checks
 
+Before submitting any Pull Request, you MUST run and verify all three local validation checks:
+
+```bash
+# 1. Validate all 12 persona profiles, 12 skills, and 10 cross-harness manifests
+npm test
+
+# 2. Typecheck TypeScript across all harness extensions (0 errors required)
+npm run typecheck
+
+# 3. Compile TypeScript output to dist/
+npm run build
+```
+
+PRs with failing tests or type errors will not be merged.
+
+---
+
+## 4. Persona System & Skill Synchronization Conventions
+
+Each persona is defined in `profiles/<name>.md` with frontmatter:
+- **`mode: readonly`**: Inspection, review, architecture, security auditing, testing.
+- **`mode: writer`**: Implementation tasks in isolated git worktree lanes (`wt/<ticket>-<slug>`).
+
+When modifying or adding a persona in `profiles/`:
+1. Ensure `profiles/<name>.md` has valid frontmatter.
+2. Mirror the persona changes into `skills/righthand-<name>/SKILL.md`.
+3. Update autocomplete lists in `.commandcode/mods/righthand.ts`, `.pi/extensions/righthand.ts`, and `bin/state.js` if adding a new persona.
+4. Run `npm test` to verify all 12 profiles, 12 skills, and 10 manifests pass validation.
+
+---
+
+## 5. Code Style Guidelines
+
+- Use descriptive variable names.
+- Follow existing patterns in the codebase.
+- Extract complex conditions into meaningful boolean variables.
+- Write clear, concise commit messages without automated bot trailers.
