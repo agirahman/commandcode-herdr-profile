@@ -70,6 +70,17 @@ npm run build
 
 ---
 
+## Reporting Issues
+
+Before creating a new issue, please search existing issues to avoid duplicates.
+
+1. **Bug Reports**:
+   - Use `.github/ISSUE_TEMPLATE/bug_report.yml` to specify target harness, persona, RightHand version, OS, and reproduction steps.
+2. **Feature & Persona Proposals**:
+   - Use `.github/ISSUE_TEMPLATE/persona_feature.yml` to propose new personas, skill expansions, or cross-harness integrations.
+
+---
+
 ## Pull Request Guidelines
 
 1. **Create a Topic Branch**:
@@ -79,9 +90,12 @@ npm run build
 2. **Commit Hygiene**:
    - Write clear, concise commit messages.
    - Do not include automated bot trailers or unrelated file changes.
-3. **Verify Everything**:
+3. **Verify Everything Locally**:
    - `npm test` must pass (12/12 profiles, 12/12 skills, 10/10 manifests).
    - `npm run typecheck` must pass with 0 errors.
+   - `npm run build` must compile clean to `dist/`.
 4. **Submit PR**:
-   - Open a pull request targeting the `main` branch.
-   - Provide a concise description of changes and test steps.
+   - Open a pull request targeting the `main` branch on `agirahman/righthand`.
+   - Complete all sections in `.github/PULL_REQUEST_TEMPLATE.md`.
+5. **Main Branch Protection & Merge Requirements**:
+   - All PRs require at least 1 review approval and 3 passing CI checks (`Validate Profiles & Skills`, `Typecheck TypeScript`, `Build Distribution`) before merging.
